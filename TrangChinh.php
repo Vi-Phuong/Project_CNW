@@ -78,7 +78,7 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
 .tb-btn.active { background:#1EA7FF; color:#ffffff; }
 
 /* Save button */
-.save-btn { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:10px; background:#111111; color:#ffffff; border:0; font-weight:700; cursor:pointer; }
+.save-btn { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:10px; background:red; color:#ffffff; border:0; font-weight:700; cursor:pointer; }
 .save-btn i { color: #ffffff; }
 
 /* Folder/tags row */
@@ -122,9 +122,8 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
     <div class="sb-top">
       <div class="sb-title">Smart Notes</div>
       <div class="sb-icons">
-        <div class="icon" id="toggle-view" title="Toggle view"><i class="fa-regular fa-square"></i></div>
         <div class="icon" title="Trash"><i class="fa-regular fa-trash-can"></i></div>
-        <div class="icon" title="Desktop"><i class="fa-regular fa-display"></i></div>
+        <div class="icon" title="Desktop"><i class="fas fa-desktop" style="color: #000000;"></i></div>
         <div class="icon plus" id="btn-new-top" title="New note"><i class="fa fa-plus"></i></div>
       </div>
     </div>
@@ -145,8 +144,8 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
   <!-- Filter all/pinned/starred -->
   <div class="filters" id="filters">
   <button class="btn filter-btn filter-all active" id="filterAll"><i class="fa fa-folder-open"></i> All</button>
-  <button class="btn filter-btn filter-pinned" id="filterPinned"><i class="fa fa-thumbtack"></i> Pinned</button>
-  <button class="btn filter-btn filter-starred" id="filterStarred"><i class="fa fa-star"></i> Starred</button>
+  <button class="btn filter-btn filter-pinned" id="filterPinned"><i class="fa fa-thumbtack" style="color:red"></i> Pinned</button>
+  <button class="btn filter-btn filter-starred" id="filterStarred"><i class="fa fa-star " style="color:yellow "></i> Starred</button>
     </div>
 
     <!-- Recent & sort -->
@@ -158,7 +157,7 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
           <option>Newest</option>
           <option>Oldest</option>
         </select>
-        <div class="icon" id="btn-new-small" title="New quick note" style="width:36px;height:36px;"><i class="fa fa-square-plus"></i></div>
+        <div class="icon" id="btn-new-small" title="New quick note" style="width:36px;height:36px;"><i class="fa fa-square-plus" style="color: #74C0FC;"></i></div>
       </div>
     </div>
 
@@ -167,7 +166,7 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
   <!-- 4) Folders + notes -->
   <div class="sb-list" id="sidebarList">
       <div class="folder-row">
-        <div class="left"><i class="fa fa-folder"></i> <span style="margin-left:8px">All Notes</span></div>
+        <div class="left"><i class="fas fa-folder" style="color: #74C0FC;"></i> <span style="margin-left:8px">All Notes</span></div>
         <div class="badge" id="allCount">0</div>
       </div>
 
@@ -193,9 +192,9 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
         <!-- toolbar buttons (mirrors screenshot) -->
   <div class="tb-btn tb-btn--text active"><i class="fa fa-font"></i> Text</div>
   <div class="tb-btn tb-btn--rich"><i class="fa-regular fa-file-lines"></i> Rich</div>
-  <div class="tb-btn tb-btn--draw"><i class="fa fa-pen-nib"></i> Draw</div>
-  <div class="tb-btn tb-btn--ai"><i class="fa fa-robot"></i> AI Assistant</div>
-  <button id="saveBtn" class="save-btn" title="Save note"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+  <div class="tb-btn tb-btn--draw"><i class="fas fa-pen-nib" style="color: #f3d230;"></i></i> Draw</div>
+  <div class="tb-btn tb-btn--ai"><i class="fas fa-robot" style="color: #23a495;"></i> AI Assistant</div>
+  <button id="saveBtn" class="save-btn" title="Save note"><i class="fa-solid fa-floppy-disk" ></i> Save</button>
       </div>
     </div>
 
