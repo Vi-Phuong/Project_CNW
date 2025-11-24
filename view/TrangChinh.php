@@ -348,3 +348,7 @@ $notes = $stmt->fetchAll();
 
 </body>
 </html>
+<?php
+ echo "hello"
+
+?>
