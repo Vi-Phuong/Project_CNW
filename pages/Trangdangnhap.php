@@ -8,32 +8,26 @@ if (isLoggedIn()) {
 }
 
 $error = '';
-$success = '';
 
 // Xử lý form POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
-    $name = $_POST['name'] ?? '';
     $password = $_POST['password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
     
-    // Validation
-    if (empty($email) || empty($name) || empty($password) || empty($confirm_password)) {
-        $error = 'Tất cả các trường không được trống.';
-    } elseif ($password !== $confirm_password) {
-        $error = 'Mật khẩu xác nhận không khớp.';
-    } elseif (strlen($password) < 6) {
-        $error = 'Mật khẩu phải có ít nhất 6 ký tự.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Email không hợp lệ.';
+    if (empty($email) || empty($password)) {
+        $error = 'Email và password không được trống.';
     } else {
-        // Tạo user
-        $user_id = createUser($email, $password, $name);
+        $user = verifyLogin($email, $password);
         
-        if ($user_id) {
-            $success = 'Đăng ký thành công! Vui lòng <a href="Trangdangnhap.php">đăng nhập</a>.';
+        if ($user) {
+            // Login thành công
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_name'] = $user['name'];
+            
+            redirect('dashboard.php', 'Đăng nhập thành công!');
         } else {
-            $error = 'Email này đã được sử dụng hoặc có lỗi xảy ra.';
+            $error = 'Email hoặc password không đúng.';
         }
     }
 }
@@ -44,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Ký - Smart Notes</title>
+    <title>Đăng Nhập - Smart Notes</title>
     <link rel="stylesheet" href="../assets/css_view.css">
     <style>
         body {
@@ -56,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: Arial, sans-serif;
         }
         
-        .register-container {
+        .login-container {
             background: white;
             padding: 40px;
             border-radius: 10px;
@@ -65,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             max-width: 400px;
         }
         
-        .register-container h1 {
+        .login-container h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
@@ -125,73 +119,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
         }
         
-        .success-message {
-            background: #efe;
-            color: #0a0;
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .login-link {
+        .register-link {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
             color: #666;
         }
         
-        .login-link a {
+        .register-link a {
             color: #667eea;
             text-decoration: none;
             font-weight: 600;
         }
         
-        .login-link a:hover {
+        .register-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h1>Đăng Ký</h1>
+    <div class="login-container">
+        <h1>Smart Notes</h1>
         
         <?php if (!empty($error)): ?>
             <div class="error-message"><?= sanitize($error) ?></div>
         <?php endif; ?>
         
-        <?php if (!empty($success)): ?>
-            <div class="success-message"><?= $success ?></div>
-        <?php else: ?>
-            <form method="POST">
-                <div class="form-group">
-                    <label for="name">Tên:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Mật khẩu:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirm_password">Xác nhận mật khẩu:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-                
-                <div class="form-group">
-                    <button type="submit">Đăng Ký</button>
-                </div>
-            </form>
-        <?php endif; ?>
+        <form method="POST">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit">Đăng Nhập</button>
+            </div>
+        </form>
         
-        <div class="login-link">
-            Đã có tài khoản? <a href="Trangdangnhap.php">Đăng nhập</a>
+        <div class="register-link">
+            Chưa có tài khoản? <a href="register.php">Đăng ký</a>
         </div>
     </div>
 </body>

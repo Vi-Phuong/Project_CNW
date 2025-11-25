@@ -1,15 +1,14 @@
 <?php
-require_once __DIR__ . '/../includes/auth_db.php';
+require_once __DIR__ . '/../includes/init.php';
 
-logout_db_user();
-
-// destroy session entirely
+// Destroy session
 if (session_status() !== PHP_SESSION_NONE) {
     $_SESSION = [];
     session_destroy();
 }
 
-header('Location: ../view/Trangdangnhap.php');
+// Redirect đến login
+header('Location: Trangdangnhap.php');
 exit;
 
 ?>
