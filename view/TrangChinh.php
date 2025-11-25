@@ -1,3 +1,71 @@
+<?php
+session_start();
+require_once 'config.php';
+
+// Kiểm tra đăng nhập
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$role_level = $_SESSION['role_level'];
+$project_id = $_SESSION['project_id'] ?? null;
+
+// ✅ Xử lý "New note"
+$title = '';
+$content = '';
+if (isset($_GET['action']) && $_GET['action'] === 'new') {
+    // Chỉ làm trống form — không lưu gì
+    $title = '';
+    $content = '';
+}
+
+// Xử lý lưu note (POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $project_id) {
+    $title = trim($_POST['title'] ?? '');
+    $content = trim($_POST['content'] ?? '');
+
+    if ($content !== '') {
+        $stmt = $pdo->prepare("
+            INSERT INTO notes (user_id, project_id, title, content, created_at, updated_at)
+            VALUES (?, ?, ?, ?, NOW(), NOW())
+        ");
+        $stmt->execute([$user_id, $project_id, $title, $content]);
+        // Sau khi lưu, reload trang để làm trống form
+        header("Location: TrangChinh.php");
+        exit;
+    }
+}
+
+// Lấy danh sách note
+$notes = [];
+if ($project_id) {
+    $stmt = $pdo->prepare("SELECT n.*, u.name as author_name FROM notes n JOIN users u ON n.user_id = u.id WHERE n.project_id = ? ORDER BY n.updated_at DESC");
+    $stmt->execute([$project_id]);
+    $notes = $stmt->fetchAll();
+}
+
+// hết new note
+// Nếu có project_id → lấy danh sách note
+$notes = [];
+if ($project_id) {
+    $stmt = $pdo->prepare("
+        SELECT n.*, u.name as author_name
+        FROM notes n
+        JOIN users u ON n.user_id = u.id
+        WHERE n.project_id = ?
+        ORDER BY n.updated_at DESC
+    ");
+    $stmt->execute([$project_id]);
+    $notes = $stmt->fetchAll();
+}
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -115,6 +183,21 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
 </head>
 <body>
 
+
+<?php
+// Lấy danh sách note trong dự án
+$stmt = $pdo->prepare("
+    SELECT n.*, u.name as author_name
+    FROM notes n
+    JOIN users u ON n.user_id = u.id
+    WHERE n.project_id = ?
+    ORDER BY n.updated_at DESC
+");
+$stmt->execute([$project_id]);
+$notes = $stmt->fetchAll();
+?>
+
+
 <div class="container">
   <!-- SIDEBAR -->
   <aside class="sidebar" id="Sidebar">
@@ -124,7 +207,9 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
       <div class="sb-icons">
         <div class="icon" title="Trash"><i class="fa-regular fa-trash-can"></i></div>
         <div class="icon" title="Desktop"><i class="fas fa-desktop" style="color: #000000;"></i></div>
-        <div class="icon plus" id="btn-new-top" title="New note"><i class="fa fa-plus"></i></div>
+        <a href="?action=new" class="icon plus" title="New note">
+          <i class="fa fa-plus"></i>
+        </a>
       </div>
     </div>
 
@@ -178,8 +263,24 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
         <div class="badge" id="notesCount">0</div>
       </div>
 
-      <!-- small note card(s) -->
-      <div id="noteSmallContainer"></div>
+      <!-- small note card(s) thêm đoạn này -->
+      <?php foreach ($notes as $note): ?>
+      <div class="note-card" data-id="<?= $note['id'] ?>">
+          <div class="note-title"><?= htmlspecialchars($note['title'] ?: 'Untitled') ?></div>
+          <div class="note-preview"><?= htmlspecialchars(substr($note['content'], 0, 80)) ?>...</div>
+          <div class="note-meta">
+              <span><?= $note['author_name'] ?></span>
+              <span><?= date('d/m/Y H:i', strtotime($note['updated_at'])) ?></span>
+          </div>
+          <div class="note-actions">
+              <a href="edit_note.php?id=<?= $note['id'] ?>">Edit</a>
+              <a href="delete_note.php?id=<?= $note['id'] ?>" onclick="return confirm('Xác nhận xóa?')">Delete</a>
+              <?php if ($role_level == 4): ?>
+                  <a href="update_status.php?note_id=<?= $note['id'] ?>">Update Status</a>
+              <?php endif; ?>
+          </div>
+      </div>
+      <?php endforeach; ?>
     </div>
   </aside>
 
@@ -187,7 +288,16 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
   <main class="main" id="mainContent">
     <!-- Top row: title (editable) & toolbar right -->
     <div class="top-row">
-      <input id="noteTitle" class="title-input" placeholder="Note title..." />
+      <!-- <input id="noteTitle" class="title-input" placeholder="Note title..." /> --> 
+       <!-- thay bằng đoạn dưới -->
+        <input 
+          type="text" 
+          id="noteTitle" 
+          name="title" 
+          class="title-input" 
+          placeholder="Note title..." 
+          value="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" 
+      />
       <div class="right-tools">
         <!-- toolbar buttons (mirrors screenshot) -->
   <div class="tb-btn tb-btn--text active"><i class="fa fa-font"></i> Text</div>
@@ -236,5 +346,5 @@ body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
 </div>
 
 
-</body>
-</html>
+
+?>

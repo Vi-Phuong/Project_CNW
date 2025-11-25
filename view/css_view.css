@@ -1,0 +1,98 @@
+/* Basic reset */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+/* Theme: sky blue, white, black */
+body { background: #ffffff; color: #111111; line-height: 1.6; font-size:15px; }
+
+/* Page layout */
+.container { display: flex; height: 100vh; }
+.sidebar { width: 320px; background: #ffffff; border-right: 1px solid #e6f2fb; padding: 20px; overflow: auto; }
+.main { flex: 1; padding: 24px 30px; overflow: auto; }
+
+/* Sidebar header (title + icons) */
+.sb-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.sb-title { font-size: 18px; font-weight: 700; letter-spacing: 0.2px; }
+.sb-icons { display: flex; gap: 8px; }
+.sb-icons .icon { width: 34px; height: 34px; background: #f0fbff; border-radius: 8px; display:flex; align-items:center; justify-content:center; color: #111111; cursor: pointer; }
+.sb-icons .icon.plus { background: #1EA7FF; color: #ffffff; width: 38px; height: 38px; border-radius: 10px; }
+
+/* small utility icon color (avoid CSS variables) */
+.icon-muted { color: #0f6fb0; }
+
+/* Search box */
+.search { display:flex; gap:10px; align-items:center; background:#f6fbff; padding:10px 12px; border-radius:12px; margin-bottom:14px; }
+.search input { border: 0; background: transparent; outline: none; width:100%; font-size:15px; color:#111111; }
+
+/* Divider line */
+.divider { height: 1px; background: #e6f2fb; margin: 10px 0; }
+
+/* Small controls */
+.adv { margin-bottom: 10px; }
+.adv .btn { background: #f8fbff; padding: 8px 10px; border-radius: 8px; border: 1px solid #e6f2fb; cursor: pointer; }
+
+/* Filters row (All / Pinned / Starred) */
+.filters { display:flex; gap: 8px; margin-bottom: 12px; }
+.filters .btn { padding: 8px 10px; border-radius: 8px; border: 0; background: transparent; cursor:pointer; font-weight:600; color:#111111; }
+.filters .btn.active { background: #1EA7FF; color: #ffffff; }
+
+/* Recent area */
+.recent { margin-bottom: 10px; }
+.recent select { padding: 8px 10px; border-radius: 8px; border: 1px solid #e6f2fb; }
+
+/* Sidebar list (folders + notes) */
+.sb-list { display:flex; flex-direction:column; gap:12px; }
+.folder-row { display:flex; justify-content:space-between; align-items:center; padding:12px; border-radius:8px; background:#ffffff; font-weight:600; }
+.badge { background:#ffffff; padding:8px 10px; border-radius:12px; border:1px solid #e6f2fb; font-size:13px; }
+
+/* Small note card */
+.note-small { background:#ffffff; border:1px solid #e6f2fb; border-radius:10px; padding:12px; cursor:pointer; }
+.note-small .title { font-weight:700; color:#111111; }
+.note-small .content { color:#3b3f45; font-size:14px; margin-top:8px; line-height:1.6; }
+.note-small .chips { margin-top:10px; display:flex; gap:8px; }
+.chip { background:#eef0f4; padding:6px 10px; border-radius:999px; font-size:13px; color:#444; }
+
+/* Top area in main (title + toolbar) */
+.top-row { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:16px; }
+.title-input { width:60%; border:0; outline:0; font-size:21px; font-weight:700; padding:6px 0; }
+.right-tools { display:flex; gap:10px; align-items:center; }
+
+/* Toolbar buttons (Text / Rich / Draw / AI) */
+.tb-btn { display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:12px; background:#ffffff; border:1px solid #e6f2fb; cursor:pointer; font-weight:700; color:#111111; }
+.tb-btn.active { background:#1EA7FF; color:#ffffff; }
+
+/* Save button */
+.save-btn { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:10px; background:red; color:#ffffff; border:0; font-weight:700; cursor:pointer; }
+.save-btn i { color: #ffffff; }
+
+/* Folder/tags row */
+.sub-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px; }
+.folder-select { padding:8px 10px; border-radius:8px; border:1px solid #e6f2fb; background:#ffffff; }
+.tag-field { padding:8px 10px; border-radius:8px; border:1px solid #e6f2fb; background:#ffffff; color:#111111; }
+.add-tag-btn { display:inline-flex; gap:8px; align-items:center; background:#1EA7FF; color:#ffffff; padding:8px 10px; border-radius:8px; border:0; cursor:pointer; font-weight:600; }
+.add-tag-btn i { color: #ffffff; }
+
+/* small icon spacing for buttons */
+.right-tools .tb-btn i,
+.btn i,
+.save-btn i,
+.add-tag-btn i { margin-right:6px; }
+
+/* Dates */
+.dates { color:#333333; font-size:13px; margin-bottom:12px; }
+
+/* Content area / editor */
+.content-area { margin-top:12px; border-top:1px solid #f0f0f2; padding-top:18px; }
+.note-editor { display:block; width:100%; min-height: 340px; padding:22px; border-radius:12px; background:#ffffff; border:1px solid #e6f2fb; font-size:16px; color:#111111; line-height:1.8; font-family: inherit; resize:vertical; }
+/* Removed contenteditable placeholder pseudo-element (we use a textarea instead) */
+.editor-label { display:block; color:#888; font-size:14px; margin-bottom:8px; }
+
+/* Responsive */
+/* Responsive rules for narrower viewports (tablets / small laptops)
+   - keep rules simple and documented so they're easy to understand
+   - only use class selectors (no variables or ARIA changes) */
+@media (max-width: 1000px) {
+  .sidebar { width: 280px; }
+  .title-input { width: 50%; }
+}
+
+/*  CSS TRANG ĐĂNG NHẬP */
